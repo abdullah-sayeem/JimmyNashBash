@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Secret Mission Game</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 2em;
+      background-color: #eef2ff;
+      text-align: center;
+    }
+    h1 {
+      color: #333;
+    }
+    .teams {
+      margin: 2em 0;
+    }
+    .teams button {
+      font-size: 1.2em;
+      margin: 0.5em;
+      padding: 1em 2em;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      color: white;
+    }
+    .blue { background-color: #3b82f6; }
+    .red { background-color: #ef4444; }
+    .green { background-color: #10b981; }
+    .jimmy { background-color: #a855f7; }
+
+    .mission-section {
+      margin-top: 2em;
+    }
+
+    input {
+      padding: 0.5em;
+      font-size: 1em;
+      margin-top: 0.5em;
+    }
+
+    .mission {
+      margin-top: 1em;
+      font-weight: bold;
+      font-size: 1.2em;
+      color: #111827;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Enter a keyword secret mission.</h1>
+
+  <div class="teams">
+    <button class="blue" onclick="goToTeam('blue')">Blue Team</button>
+    <button class="red" onclick="goToTeam('red')">Red Team</button>
+    <button class="green" onclick="goToTeam('green')">Green Team</button>
+    <button class="jimmy" onclick="goToTeam('jimmy')">Jimmy Team</button>
+  </div>
+
+  <div class="mission-section">
+    <input type="text" id="keywordInput" placeholder="Enter keyword..." />
+    <br/>
+    <button onclick="checkMission()">Submit</button>
+    <div class="mission" id="missionResult"></div>
+  </div>
+
+  <script>
+    function goToTeam(team) {
+      window.location.href = `${team}.html`;
+    }
+
+    const missions = {
+      abs: "Congrats! You’ve unlocked a secret Abdullah mission. Send a selfie to Abdullah.",
+      jimmy: "Nothing to congratulate, this is the free mission. Take a picture of someone or something that resembles our boy Jimmy.",
+      robert: "Congrats! You’ve unlocked an even secret-er Robert mission. Get Robert to send you a selfie.",
+      nashville: "Now this is a secret mission, take a picture of something historical in Nashville.",
+      bachelor: "Whoa, now you’re thinking, take a picture of Jimmy being serious."
+    };
+
+    function checkMission() {
+      const input = document.getElementById("keywordInput").value.trim().toLowerCase();
+      const result = missions[input];
+
+      const display = document.getElementById("missionResult");
+      if (result) {
+        display.textContent = result;
+      } else {
+        display.textContent = "No secret mission found for that keyword.";
+      }
+    }
+  </script>
+
+</body>
+</html>
