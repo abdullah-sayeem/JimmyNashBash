@@ -11,16 +11,19 @@
     color: white;
     padding: 2em;
     text-align: center;
+    transition: background-color 0.3s ease;
   }
   h1 {
-    font-size: 2.8em;
-    margin-bottom: 0.5em;
+    font-size: 2.4em;
+    margin-bottom: 1em;
   }
   .team-buttons {
     display: flex;
-    justify-content: center;
-    gap: 2em;
+    flex-direction: column;
+    align-items: center;
+    gap: 1em;
     margin-bottom: 1.5em;
+    transition: all 0.3s ease;
   }
   .team-button {
     padding: 1em 2em;
@@ -33,7 +36,8 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 140px;
+    width: 180px;
+    transition: transform 0.2s ease;
   }
   .team-button img {
     width: 60px;
@@ -41,136 +45,128 @@
     margin-bottom: 0.3em;
     filter: drop-shadow(0 0 3px rgba(0,0,0,0.7));
   }
-  .blue {
-    background-color: #3b82f6;
+  .blue { background-color: #3b82f6; }
+  .red { background-color: #ef4444; }
+  .green { background-color: #22c55e; }
+  .jimmy { background-color: #facc15; color: black; }
+  .team-button:hover {
+    transform: scale(1.05);
   }
-  .red {
-    background-color: #ef4444;
-  }
-  .green {
-    background-color: #22c55e;
-  }
-  .jimmy {
-    background-color: #facc15;
-    color: black;
-  }
-  #keyword-section {
-    margin-top: 2em;
-  }
-  #keyword-label {
-    font-size: 1.3em;
-    margin-bottom: 0.3em;
-    font-weight: bold;
-  }
-  #keyword-input {
+  .missions {
     font-size: 1.1em;
-    padding: 0.5em;
-    width: 250px;
-    border-radius: 6px;
-    border: 2px solid #666;
-    text-align: center;
-  }
-  #secret-mission {
-    margin-top: 1.5em;
-    font-size: 1.3em;
-    min-height: 140px;
-  }
-  #secret-mission img {
+    text-align: left;
     margin-top: 1em;
-    width: 120px;
-    image-rendering: pixelated;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .missions li {
+    margin: 0.4em 0;
+  }
+  #go-back {
+    margin-top: 1em;
+    padding: 0.6em 1.2em;
+    font-size: 1em;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    background-color: #444;
+    color: white;
   }
 </style>
 </head>
 <body>
   <h1>Nashville Bachelor Games</h1>
 
-  <div class="team-buttons">
-    <button class="team-button blue" onclick="location.href='blue.html'">
+  <div class="team-buttons" id="team-buttons">
+    <button class="team-button blue" onclick="selectTeam('blue')">
       <img src="https://play.pokemonshowdown.com/sprites/ani/squirtle.gif" alt="Squirtle" />
       Blue Team
     </button>
-    <button class="team-button red" onclick="location.href='red.html'">
+    <button class="team-button red" onclick="selectTeam('red')">
       <img src="https://play.pokemonshowdown.com/sprites/ani/charmander.gif" alt="Charmander" />
       Red Team
     </button>
-    <button class="team-button green" onclick="location.href='green.html'">
+    <button class="team-button green" onclick="selectTeam('green')">
       <img src="https://play.pokemonshowdown.com/sprites/ani/bulbasaur.gif" alt="Bulbasaur" />
       Green Team
     </button>
-    <button class="team-button jimmy" onclick="location.href='jimmy.html'">
+    <button class="team-button jimmy" onclick="selectTeam('jimmy')">
       <img src="https://play.pokemonshowdown.com/sprites/ani/pikachu.gif" alt="Pikachu" />
       Jimmy Team
     </button>
   </div>
 
-  <div id="keyword-section">
-    <div id="keyword-label">Enter a keyword for a secret mission</div>
-    <input id="keyword-input" type="text" placeholder="Secret mission..." oninput="checkKeyword()" autocomplete="off" />
-    <div id="secret-mission"></div>
-  </div>
+  <div id="missions-container"></div>
 
-  <!-- Confetti library -->
-  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-
-  <script>
-    const secretMissions = {
-      abs: {
-        text: "Congrats! You’ve unlocked a secret Abdullah mission. Send a selfie to Abdullah.",
-        gif: "https://play.pokemonshowdown.com/sprites/ani/alakazam.gif"
-      },
-      jimmy: {
-        text: "Nothing to congratulate, this is the free mission. Give Jimmy a dap for a free point.",
-        gif: "https://play.pokemonshowdown.com/sprites/ani/gengar.gif"
-      },
-      robert: {
-        text: "Congrats! You’ve unlocked an even secret-er Robert mission. Get Robert to send you a selfie.",
-        gif: "https://play.pokemonshowdown.com/sprites/ani/sudowoodo.gif"
-      },
-      nashville: {
-        text: "Now this is a secret mission, take a picture of something historical in Nashville.",
-        gif: "https://play.pokemonshowdown.com/sprites/ani/rapidash.gif"
-      },
-      bachelor: {
-        text: "Whoa, now you’re thinking, take a picture of Jimmy being funny.",
-        gif: "https://play.pokemonshowdown.com/sprites/ani/machamp.gif"
-      },
-      october: {
-        text: "A special month, a special mission, take a picture of Jimmy being serious.",
-        gif: "https://play.pokemonshowdown.com/sprites/ani/mrmime.gif"
-      },
-      secret: {
-        text: "A bit on a nose right? Send a picture of Jimmy partaking in any Nashville festivities.",
-        gif: "https://play.pokemonshowdown.com/sprites/ani/lapras.gif"
-      }
-    };
-
-    let lastKeyword = "";
-
-    function checkKeyword() {
-      const input = document.getElementById("keyword-input").value.trim().toLowerCase();
-      const missionDiv = document.getElementById("secret-mission");
-
-      if (input && secretMissions[input]) {
-        missionDiv.innerHTML = `
-          <div>${secretMissions[input].text}</div>
-          <img src="${secretMissions[input].gif}" alt="Secret mission gif" />
-        `;
-
-        // Fire confetti only if new keyword (to avoid spam on continuous typing)
-        if (input !== lastKeyword) {
-          confetti({
-            particleCount: 100,
-            spread: 70,
-            origin: { y: 0.6 }
-          });
-          lastKeyword = input;
-        }
-      } else {
-        missionDiv.innerHTML = "";
-        lastKeyword = "";
-      }
+<script>
+  const teamData = {
+    blue: {
+      color: "#3b82f6",
+      missions: [
+        "1. Take a group photo with a stranger wearing blue.",
+        "2. Find a blue-themed drink and photograph it.",
+        "3. Convince another team to trade items with you."
+      ]
+    },
+    red: {
+      color: "#ef4444",
+      missions: [
+        "1. Get a photo with someone wearing a red hat.",
+        "2. Find a Nashville hot chicken sign and pose with it.",
+        "3. Teach someone a dance move and record it."
+      ]
+    },
+    green: {
+      color: "#22c55e",
+      missions: [
+        "1. Spot and take a picture of something green in nature.",
+        "2. Get a selfie with a street performer.",
+        "3. High-five 5 strangers in a row."
+      ]
+    },
+    jimmy: {
+      color: "#facc15",
+      missions: [
+        "1. Take a video of Jimmy singing.",
+        "2. Photograph Jimmy doing something silly.",
+        "3. Get someone to say 'Jimmy is the best' on camera."
+      ]
     }
-  </script>
+  };
+
+  let originalButtonsHTML = document.getElementById("team-buttons").innerHTML;
+
+  function selectTeam(team) {
+    const container = document.getElementById("team-buttons");
+    const buttons = Array.from(container.children);
+    const clickedButton = buttons.find(btn => btn.classList.contains(team));
+
+    // Move clicked button to top
+    container.innerHTML = "";
+    container.appendChild(clickedButton);
+    buttons.filter(btn => btn !== clickedButton).forEach(btn => container.appendChild(btn));
+
+    // Change background color
+    document.body.style.backgroundColor = teamData[team].color;
+
+    // Show missions + back button
+    document.getElementById("missions-container").innerHTML = `
+      <div class="missions">
+        <ul>
+          ${teamData[team].missions.map(m => `<li>${m}</li>`).join("")}
+        </ul>
+        <button id="go-back" onclick="goBack()">Go Back</button>
+      </div>
+    `;
+  }
+
+  function goBack() {
+    // Restore buttons and background
+    document.getElementById("team-buttons").innerHTML = originalButtonsHTML;
+    document.body.style.backgroundColor = "#111";
+    document.getElementById("missions-container").innerHTML = "";
+  }
+</script>
 </body>
 </html>
