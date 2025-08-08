@@ -110,50 +110,67 @@
     <div id="secret-mission"></div>
   </div>
 
-<script>
-  const secretMissions = {
-    abs: {
-      text: "Congrats! You’ve unlocked a secret Abdullah mission. Send a selfie to Abdullah.",
-      gif: "https://play.pokemonshowdown.com/sprites/ani/alakazam.gif"
-    },
-    jimmy: {
-      text: "Nothing to congratulate, this is the free mission. Give Jimmy a dap for a free point.",
-      gif: "https://play.pokemonshowdown.com/sprites/ani/gengar.gif"
-    },
-    robert: {
-      text: "Congrats! You’ve unlocked an even secret-er Robert mission. Get Robert to send you a selfie.",
-      gif: "https://play.pokemonshowdown.com/sprites/ani/sudowoodo.gif"
-    },
-    nashville: {
-      text: "Now this is a secret mission, take a picture of something historical in Nashville.",
-      gif: "https://play.pokemonshowdown.com/sprites/ani/rapidash.gif"
-    },
-    bachelor: {
-      text: "Whoa, now you’re thinking, take a picture of Jimmy being funny.",
-      gif: "https://play.pokemonshowdown.com/sprites/ani/machamp.gif"
-    },
-    october: {
-      text: "A special month, a special mission, take a picture of Jimmy being serious.",
-      gif: "https://play.pokemonshowdown.com/sprites/ani/mrmime.gif"
-    },
-    secret: {
-      text: "A bit on a nose right? Send a picture of Jimmy partaking in any Nashville festivities.",
-      gif: "https://play.pokemonshowdown.com/sprites/ani/lapras.gif"
-    }
-  };
+  <!-- Confetti library -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
-  function checkKeyword() {
-    const input = document.getElementById("keyword-input").value.trim().toLowerCase();
-    const missionDiv = document.getElementById("secret-mission");
-    if (input && secretMissions[input]) {
-      missionDiv.innerHTML = `
-        <div>${secretMissions[input].text}</div>
-        <img src="${secretMissions[input].gif}" alt="Secret mission gif" />
-      `;
-    } else {
-      missionDiv.innerHTML = "";
+  <script>
+    const secretMissions = {
+      abs: {
+        text: "Congrats! You’ve unlocked a secret Abdullah mission. Send a selfie to Abdullah.",
+        gif: "https://play.pokemonshowdown.com/sprites/ani/alakazam.gif"
+      },
+      jimmy: {
+        text: "Nothing to congratulate, this is the free mission. Give Jimmy a dap for a free point.",
+        gif: "https://play.pokemonshowdown.com/sprites/ani/gengar.gif"
+      },
+      robert: {
+        text: "Congrats! You’ve unlocked an even secret-er Robert mission. Get Robert to send you a selfie.",
+        gif: "https://play.pokemonshowdown.com/sprites/ani/sudowoodo.gif"
+      },
+      nashville: {
+        text: "Now this is a secret mission, take a picture of something historical in Nashville.",
+        gif: "https://play.pokemonshowdown.com/sprites/ani/rapidash.gif"
+      },
+      bachelor: {
+        text: "Whoa, now you’re thinking, take a picture of Jimmy being funny.",
+        gif: "https://play.pokemonshowdown.com/sprites/ani/machamp.gif"
+      },
+      october: {
+        text: "A special month, a special mission, take a picture of Jimmy being serious.",
+        gif: "https://play.pokemonshowdown.com/sprites/ani/mrmime.gif"
+      },
+      secret: {
+        text: "A bit on a nose right? Send a picture of Jimmy partaking in any Nashville festivities.",
+        gif: "https://play.pokemonshowdown.com/sprites/ani/lapras.gif"
+      }
+    };
+
+    let lastKeyword = "";
+
+    function checkKeyword() {
+      const input = document.getElementById("keyword-input").value.trim().toLowerCase();
+      const missionDiv = document.getElementById("secret-mission");
+
+      if (input && secretMissions[input]) {
+        missionDiv.innerHTML = `
+          <div>${secretMissions[input].text}</div>
+          <img src="${secretMissions[input].gif}" alt="Secret mission gif" />
+        `;
+
+        // Fire confetti only if new keyword (to avoid spam on continuous typing)
+        if (input !== lastKeyword) {
+          confetti({
+            particleCount: 100,
+            spread: 70,
+            origin: { y: 0.6 }
+          });
+          lastKeyword = input;
+        }
+      } else {
+        missionDiv.innerHTML = "";
+        lastKeyword = "";
+      }
     }
-  }
-</script>
+  </script>
 </body>
 </html>
