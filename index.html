@@ -7,122 +7,107 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      padding: 2em;
-      background-color: #eef2ff;
+      background-color: #f9f9f9;
       text-align: center;
+      padding: 2em;
     }
     h1 {
-      color: #333;
+      margin-bottom: 1.5em;
     }
-
-    .teams {
-      margin: 2em 0;
-    }
-
-    .teams button {
+    .team-buttons {
       display: flex;
-      align-items: center;
+      flex-wrap: wrap;
       justify-content: center;
-      font-size: 1.2em;
-      margin: 0.5em;
-      padding: 1em 1.5em;
+      gap: 1em;
+      margin-bottom: 2em;
+    }
+    .team-btn {
       border: none;
-      border-radius: 8px;
+      padding: 1em;
+      border-radius: 12px;
+      width: 150px;
       cursor: pointer;
       color: white;
-      width: 250px;
-      max-width: 90%;
+      font-size: 1em;
     }
-
-    .teams img {
-      height: 30px;
-      margin-right: 10px;
-    }
-
     .blue { background-color: #3b82f6; }
     .red { background-color: #ef4444; }
-    .green { background-color: #10b981; }
-    .jimmy { background-color: #facc15; color: #1f1f1f; }
+    .green { background-color: #22c55e; }
+    .yellow { background-color: #facc15; color: black; }
 
-    .mission-section {
+    .team-btn img {
+      display: block;
+      margin: 0 auto 0.5em auto;
+      max-width: 80px;
+    }
+
+    .keyword-section {
       margin-top: 2em;
     }
-
-    input {
+    input[type="text"] {
       padding: 0.5em;
       font-size: 1em;
-      margin-top: 0.5em;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      width: 200px;
     }
-
-    .mission {
-      margin-top: 1em;
-      font-weight: bold;
-      font-size: 1.2em;
-      color: #111827;
-    }
-
-    .team-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+    button.go-btn {
+      padding: 0.5em 1em;
+      font-size: 1em;
+      margin-left: 0.5em;
+      border: none;
+      background-color: #3b82f6;
+      color: white;
+      border-radius: 6px;
+      cursor: pointer;
     }
   </style>
 </head>
 <body>
-
   <h1>Nashville Bachelor Games</h1>
 
-  <div class="teams team-container">
-    <button class="blue" onclick="goToTeam('blue')">
-      <img src="https://assets.pokemon.com/assets/cms2/img/pokedex/full/007.png" alt="Squirtle" />
+  <div class="team-buttons">
+    <button class="team-btn blue" onclick="location.href='blue.html'">
+      <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/7.png" alt="Squirtle silhouette"/>
       Blue Team
     </button>
-    <button class="red" onclick="goToTeam('red')">
-      <img src="https://assets.pokemon.com/assets/cms2/img/pokedex/full/004.png" alt="Charmander" />
+    <button class="team-btn red" onclick="location.href='red.html'">
+      <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/4.png" alt="Charmander silhouette"/>
       Red Team
     </button>
-    <button class="green" onclick="goToTeam('green')">
-      <img src="https://assets.pokemon.com/assets/cms2/img/pokedex/full/001.png" alt="Bulbasaur" />
+    <button class="team-btn green" onclick="location.href='green.html'">
+      <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/1.png" alt="Bulbasaur silhouette"/>
       Green Team
     </button>
-    <button class="jimmy" onclick="goToTeam('jimmy')">
-      <img src="https://assets.pokemon.com/assets/cms2/img/pokedex/full/025.png" alt="Pikachu" />
+    <button class="team-btn yellow" onclick="location.href='jimmy.html'">
+      <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/25.png" alt="Pikachu silhouette"/>
       Jimmy Team
     </button>
   </div>
 
-  <div class="mission-section">
-    <input type="text" id="keywordInput" placeholder="Secret mission..." />
-    <br/>
-    <button onclick="checkMission()">Submit</button>
-    <div class="mission" id="missionResult"></div>
+  <div class="keyword-section">
+    <p>Enter a keyword secret mission.</p>
+    <input type="text" id="keyword" placeholder="Secret mission..." />
+    <button class="go-btn" onclick="checkKeyword()">Go</button>
   </div>
 
   <script>
-    function goToTeam(team) {
-      window.location.href = `${team}.html`;
-    }
-
-    const missions = {
-      abs: "Congrats! You’ve unlocked a secret Abdullah mission. Send a selfie to Abdullah.",
-      jimmy: "Nothing to congratulate, this is the free mission. Take a picture of someone or something that resembles our boy Jimmy.",
-      robert: "Congrats! You’ve unlocked an even secret-er Robert mission. Get Robert to send you a selfie.",
-      nashville: "Now this is a secret mission, take a picture of something historical in Nashville.",
-      bachelor: "Whoa, now you’re thinking, take a picture of Jimmy being serious."
-    };
-
-    function checkMission() {
-      const input = document.getElementById("keywordInput").value.trim().toLowerCase();
-      const result = missions[input];
-
-      const display = document.getElementById("missionResult");
-      if (result) {
-        display.textContent = result;
+    function checkKeyword() {
+      const kw = document.getElementById('keyword').value.trim().toLowerCase();
+      if (kw === "abs") {
+        alert("Congrats! You’ve unlocked a secret Abdullah mission. Send a selfie to Abdullah.");
+      } else if (kw === "jimmy") {
+        alert("Nothing to congratulate, this is the free mission. Take a picture of someone or something that resembles our boy Jimmy.");
+      } else if (kw === "robert") {
+        alert("Congrats! You’ve unlocked an even secret-er Robert mission. Get Robert to send you a selfie.");
+      } else if (kw === "nashville") {
+        alert("Now this is a secret mission, take a picture of something historical in Nashville.");
+      } else if (kw === "bachelor") {
+        alert("Whoa, now you’re thinking, take a picture of Jimmy being serious.");
       } else {
-        display.textContent = "No secret mission found for that keyword.";
+        alert("No mission found for that keyword!");
       }
     }
   </script>
-
 </body>
 </html>
