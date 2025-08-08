@@ -1,72 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Jimmy Team</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #facc15;
-      color: black;
-      margin: 0;
-      padding: 2em;
-      text-align: center;
-      min-height: 100vh;
-      box-sizing: border-box;
-    }
-    h1 {
-      margin-bottom: 0.5em;
-      font-size: 1.8em;
-      text-shadow: 0 0 8px #b59f00;
-    }
-    img.team-mascot {
-      max-width: 180px;
-      margin-bottom: 1em;
-      image-rendering: pixelated;
-      filter: drop-shadow(0 0 5px #b59f00);
-    }
-    .rating-note {
-      max-width: 600px;
-      margin: 0 auto 1em;
-      font-weight: bold;
-      font-size: 1em;
-      text-align: center;
-      text-shadow: 0 0 6px #b59f00;
-    }
-    ol {
-      list-style: decimal inside;
-      font-size: 0.9em;
-      max-width: 600px;
-      margin: 0 auto;
-      text-align: left;
-      padding-left: 0;
-    }
-    li {
-      margin-bottom: 1em;
-      line-height: 1.3;
-    }
-    /* Responsive */
-    @media (max-width: 480px) {
-      body {
-        padding: 1em;
-      }
-      img.team-mascot {
-        max-width: 140px;
-      }
-      ol {
-        font-size: 0.8em;
-      }
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Jimmy Team Missions</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #facc15;
+    color: black;
+    padding: 2em;
+    text-align: center;
+  }
+  h1 {
+    font-size: 2.4em;
+    margin-bottom: 0.3em;
+  }
+  img.team-mascot {
+    width: 120px;
+    image-rendering: pixelated;
+    margin-bottom: 1em;
+  }
+  p.note {
+    font-size: 1.2em;
+    font-weight: bold;
+    margin-bottom: 1em;
+  }
+  ul.mission-list {
+    font-size: 1.3em;
+    text-align: left;
+    max-width: 480px;
+    margin: 0 auto;
+    line-height: 1.5em;
+  }
+  ul.mission-list li {
+    margin-bottom: 0.8em;
+  }
+</style>
 </head>
 <body>
-  <h1>Jimmy Team</h1>
-  <img class="team-mascot" src="https://assets.pokemon.com/assets/cms2/img/pokedex/full/025.png" alt="Pikachu" />
-
-  <div class="rating-note">Each objective will be rated between 0-5</div>
-
-  <ol>
+  <h1>Jimmy Team Missions</h1>
+  <img class="team-mascot" src="https://play.pokemonshowdown.com/sprites/ani/pikachu.gif" alt="Pikachu animation" />
+  <p class="note">Each objective will be rated between 0-5</p>
+  <ul class="mission-list">
     <li>Find an object or animal that resembles a ‘yellow’ Pokemon</li>
     <li>Eat something ‘yellow’</li>
     <li>During the trip make a ‘yellow’ drink, or order one</li>
@@ -77,6 +53,6 @@
     <li>Take a picture of someone or something that resembles Jimmy</li>
     <li>Have a conversation with a Nashville native and get a food suggestion</li>
     <li>Practice your rizz with a stranger or strange thing</li>
-  </ol>
+  </ul>
 </body>
 </html>
