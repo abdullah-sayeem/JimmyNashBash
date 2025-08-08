@@ -4,10 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Jimmy Team</title>
-  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
   <style>
     body {
-      font-family: 'Press Start 2P', cursive, Arial, sans-serif;
+      font-family: Arial, sans-serif;
       background-color: #facc15;
       color: black;
       margin: 0;
@@ -27,6 +26,14 @@
       image-rendering: pixelated;
       filter: drop-shadow(0 0 5px #b59f00);
     }
+    .rating-note {
+      max-width: 600px;
+      margin: 0 auto 1em;
+      font-weight: bold;
+      font-size: 1em;
+      text-align: center;
+      text-shadow: 0 0 6px #b59f00;
+    }
     ol {
       list-style: decimal inside;
       font-size: 0.9em;
@@ -38,21 +45,6 @@
     li {
       margin-bottom: 1em;
       line-height: 1.3;
-    }
-    label {
-      cursor: pointer;
-      user-select: none;
-    }
-    input[type="checkbox"] {
-      transform: scale(1.3);
-      margin-right: 0.6em;
-      cursor: pointer;
-    }
-    #points-counter {
-      font-size: 1.2em;
-      margin-top: 1.5em;
-      font-weight: bold;
-      text-shadow: 0 0 10px #b59f00;
     }
     /* Responsive */
     @media (max-width: 480px) {
@@ -72,54 +64,19 @@
   <h1>Jimmy Team</h1>
   <img class="team-mascot" src="https://assets.pokemon.com/assets/cms2/img/pokedex/full/025.png" alt="Pikachu" />
 
-  <ol id="mission-list">
-    <li><label><input type="checkbox" /> Find an object or animal that resembles a ‘yellow’ Pokemon</label></li>
-    <li><label><input type="checkbox" /> Eat something ‘yellow’</label></li>
-    <li><label><input type="checkbox" /> During the trip make a ‘yellow’ drink, or order one</label></li>
-    <li><label><input type="checkbox" /> During a supply run, find and buy something unique that’s ‘yellow’</label></li>
-    <li><label><input type="checkbox" /> Find something ‘yellow’ at one of the nights out</label></li>
-    <li><label><input type="checkbox" /> Find something ‘yellow’ at either the Museum or Parthenon</label></li>
-    <li><label><input type="checkbox" /> Find a ‘yellow’ item that resembles Nashville</label></li>
-    <li><label><input type="checkbox" /> Take a picture of someone or something that resembles Jimmy</label></li>
-    <li><label><input type="checkbox" /> Have a conversation with a Nashville native and get a food suggestion</label></li>
-    <li><label><input type="checkbox" /> Practice your rizz with a stranger or strange thing</label></li>
+  <div class="rating-note">Each objective will be rated between 0-5</div>
+
+  <ol>
+    <li>Find an object or animal that resembles a ‘yellow’ Pokemon</li>
+    <li>Eat something ‘yellow’</li>
+    <li>During the trip make a ‘yellow’ drink, or order one</li>
+    <li>During a supply run, find and buy something unique that’s ‘yellow’</li>
+    <li>Find something ‘yellow’ at one of the nights out</li>
+    <li>Find something ‘yellow’ at either the Museum or Parthenon</li>
+    <li>Find a ‘yellow’ item that resembles Nashville</li>
+    <li>Take a picture of someone or something that resembles Jimmy</li>
+    <li>Have a conversation with a Nashville native and get a food suggestion</li>
+    <li>Practice your rizz with a stranger or strange thing</li>
   </ol>
-
-  <div id="points-counter">Points: 0</div>
-
-  <script>
-    const missionList = document.getElementById('mission-list');
-    const pointsCounter = document.getElementById('points-counter');
-    const STORAGE_KEY = 'jimmy-team-missions';
-
-    function updatePoints() {
-      const checkedBoxes = missionList.querySelectorAll('input[type=checkbox]:checked').length;
-      pointsCounter.textContent = `Points: ${checkedBoxes}`;
-    }
-
-    function saveProgress() {
-      const states = Array.from(missionList.querySelectorAll('input[type=checkbox]')).map(cb => cb.checked);
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(states));
-    }
-
-    function loadProgress() {
-      const saved = localStorage.getItem(STORAGE_KEY);
-      if (saved) {
-        const states = JSON.parse(saved);
-        const checkboxes = missionList.querySelectorAll('input[type=checkbox]');
-        states.forEach((state, i) => {
-          if (checkboxes[i]) checkboxes[i].checked = state;
-        });
-        updatePoints();
-      }
-    }
-
-    missionList.addEventListener('change', () => {
-      updatePoints();
-      saveProgress();
-    });
-
-    loadProgress();
-  </script>
 </body>
 </html>
