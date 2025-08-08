@@ -113,9 +113,9 @@ const TEAMS = {
       "Find an object or animal that resembles a ‘blue’ Pokemon",
       "Eat something ‘blue’",
       "During the trip make a ‘blue’ drink, or order one",
-      "During a supply run, find and buy something unique that’s ‘blue’",
-      "Find something ‘blue’ at one of the nights out",
-      "Find something ‘blue’ at either the Museum or Parthenon",
+      "Take a selfie with a local musician or performer",
+      "Find a place with a great view of the blue Nashville skyline",
+      "Try a classic Southern snack and share a photo",
       "Find a ‘blue’ item that resembles Nashville",
       "Take a picture of someone or something that resembles Jimmy",
       "Have a conversation with a Nashville native and get a food suggestion",
@@ -132,9 +132,9 @@ const TEAMS = {
       "Find an object or animal that resembles a ‘red’ Pokemon",
       "Eat something ‘red’",
       "During the trip make a ‘red’ drink, or order one",
-      "During a supply run, find and buy something unique that’s ‘red’",
-      "Find something ‘red’ at one of the nights out",
-      "Find something ‘red’ at either the Museum or Parthenon",
+      "Take a picture of a fiery hot sauce or spicy dish",
+      "Find a place where people are dancing or having fun",
+      "Snap a photo of a red neon sign or light",
       "Find a ‘red’ item that resembles Nashville",
       "Take a picture of someone or something that resembles Jimmy",
       "Have a conversation with a Nashville native and get a food suggestion",
@@ -151,9 +151,9 @@ const TEAMS = {
       "Find an object or animal that resembles a ‘green’ Pokemon",
       "Eat something ‘green’",
       "During the trip make a ‘green’ drink, or order one",
-      "During a supply run, find and buy something unique that’s ‘green’",
-      "Find something ‘green’ at one of the nights out",
-      "Find something ‘green’ at either the Museum or Parthenon",
+      "Find and photograph a park or green space in the city",
+      "Take a picture of an interesting plant or flower",
+      "Spot some wildlife (bird, squirrel, etc.) and capture it",
       "Find a ‘green’ item that resembles Nashville",
       "Take a picture of someone or something that resembles Jimmy",
       "Have a conversation with a Nashville native and get a food suggestion",
@@ -170,9 +170,9 @@ const TEAMS = {
       "Find an object or animal that resembles a ‘yellow’ Pokemon",
       "Eat something ‘yellow’",
       "During the trip make a ‘yellow’ drink, or order one",
-      "During a supply run, find and buy something unique that’s ‘yellow’",
-      "Find something ‘yellow’ at one of the nights out",
-      "Find something ‘yellow’ at either the Museum or Parthenon",
+      "Capture a photo of something shiny or golden",
+      "Find a place where people are smiling or laughing",
+      "Take a picture of a yellow food or dessert",
       "Find a ‘yellow’ item that resembles Nashville",
       "Take a picture of someone or something that resembles Jimmy",
       "Have a conversation with a Nashville native and get a food suggestion",
@@ -209,6 +209,11 @@ function buildTeamButtons(){
     btn.className = `team-btn ${key}`;
     btn.dataset.team = key;
     btn.innerHTML = `<img src="${t.startGif}" alt="${t.title}"><div>${t.title}</div>`;
+    // Ensure Jimmy team button is yellow background explicitly
+    if(key === 'jimmy'){
+      btn.style.backgroundColor = t.color;
+      btn.style.color = '#222';
+    }
     btn.onclick = ()=> selectTeam(key);
     btn.style.opacity = '1';
     btn.style.pointerEvents = 'auto';
@@ -280,11 +285,7 @@ function renderTeamPanel(teamKey){
       // update mascot based on count
       const mg = document.getElementById('mascotGif');
       mg.src = evolutionGifForCount(teamKey, countChecked(saved));
-      // fanfare on 5 or 10 checked
-      const checkedCount = countChecked(saved);
-      if(checkedCount===5 || checkedCount===10){
-        confettiBurst(300);
-      }
+      // No confetti on evolution now
     });
   });
 
