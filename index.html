@@ -23,7 +23,6 @@
     align-items: center;
     gap: 1em;
     margin-bottom: 1.5em;
-    transition: all 0.3s ease;
   }
   .team-button {
     padding: 1em 2em;
@@ -99,6 +98,10 @@
 
   <div id="missions-container"></div>
 
+  <!-- Canvas for Confetti -->
+  <canvas id="confetti-canvas" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:999;"></canvas>
+
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 <script>
   const teamData = {
     blue: {
@@ -139,15 +142,13 @@
 
   function selectTeam(team) {
     const container = document.getElementById("team-buttons");
-    const buttons = Array.from(container.children);
-    const clickedButton = buttons.find(btn => btn.classList.contains(team));
+    const clickedButton = Array.from(container.children).find(btn => btn.classList.contains(team));
 
-    // Move clicked button to top
+    // Clear all buttons except clicked
     container.innerHTML = "";
     container.appendChild(clickedButton);
-    buttons.filter(btn => btn !== clickedButton).forEach(btn => container.appendChild(btn));
 
-    // Change background color
+    // Change background
     document.body.style.backgroundColor = teamData[team].color;
 
     // Show missions + back button
@@ -159,6 +160,13 @@
         <button id="go-back" onclick="goBack()">Go Back</button>
       </div>
     `;
+
+    // Confetti flair
+    confetti({
+      particleCount: 150,
+      spread: 70,
+      origin: { y: 0.6 }
+    });
   }
 
   function goBack() {
