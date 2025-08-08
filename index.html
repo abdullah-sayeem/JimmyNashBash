@@ -1,180 +1,390 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Nashville Bachelor Games</title>
+<link rel="icon" href="data:,">
 <style>
-  body {
-    font-family: Arial, sans-serif;
-    background: #111;
-    color: white;
-    padding: 2em;
-    text-align: center;
-    transition: background-color 0.3s ease;
+  :root{
+    --bg:#111;
+    --text:#fff;
+    --card-radius:12px;
+    --gap:14px;
   }
-  h1 {
-    font-size: 2.4em;
-    margin-bottom: 1em;
+  html,body{height:100%;margin:0;background:var(--bg);color:var(--text);font-family:Arial,Helvetica,sans-serif}
+  .wrap{max-width:980px;margin:18px auto;padding:18px}
+  h1{margin:0 0 12px;font-size:28px;text-align:center}
+  .layout{display:flex;gap:24px;align-items:flex-start;justify-content:center;flex-wrap:nowrap}
+  /* left column: team buttons vertically */
+  .teams-col{display:flex;flex-direction:column;gap:var(--gap);align-items:center;min-width:200px}
+  .team-btn{
+    width:200px;
+    border-radius:12px;
+    border:0;
+    padding:12px;
+    cursor:pointer;
+    color:white;
+    font-weight:700;
+    display:flex;flex-direction:column;align-items:center;gap:6px;
+    box-shadow:0 6px 14px rgba(0,0,0,0.35);
+    transition:transform .15s ease,opacity .2s ease;
   }
-  .team-buttons {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1em;
-    margin-bottom: 1.5em;
+  .team-btn:hover{transform:translateY(-3px)}
+  .team-btn img{width:96px;height:96px;image-rendering:pixelated;filter:drop-shadow(0 3px 8px rgba(0,0,0,0.35))}
+  .blue{background:#3b82f6}
+  .red{background:#ef4444}
+  .green{background:#22c55e}
+  .yellow{background:#facc15;color:#222}
+  /* main panel */
+  .panel{flex:1;min-width:320px;background:rgba(255,255,255,0.03);border-radius:12px;padding:18px;box-shadow:0 8px 24px rgba(0,0,0,0.5);color:#fff}
+  .mascot{display:block;margin:0 auto 8px;width:140px;height:140px;image-rendering:pixelated}
+  .note{font-weight:700;margin:6px 0 12px;text-align:center}
+  ol.missions{font-size:1.1em;line-height:1.4;margin:0 0 12px;padding-left:1.3em}
+  ol.missions li{margin-bottom:1em;display:flex;align-items:center;gap:12px}
+  .mission-checkbox{transform:scale(1.3);cursor:pointer}
+  .controls{display:flex;gap:12px;align-items:center;flex-wrap:wrap;justify-content:center;margin-top:14px}
+  .btn{padding:9px 14px;border-radius:10px;border:0;cursor:pointer;font-weight:700;user-select:none;transition:background-color 0.25s ease}
+  .btn-secondary{background:#444;color:#fff}
+  .btn-secondary:hover{background:#666}
+  .secret-box{margin-top:18px;text-align:center}
+  .secret-input{
+    padding:9px 12px;
+    border-radius:8px;
+    border:2px solid #666;
+    min-width:220px;
+    font-size:1.1em;
+    font-weight:700;
+    text-transform: lowercase;
   }
-  .team-button {
-    padding: 1em 2em;
-    font-size: 1.25em;
-    font-weight: bold;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    color: white;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 180px;
-    transition: transform 0.2s ease;
+  .mission-reveal{
+    margin-top:14px;
+    padding:14px;
+    border-radius:12px;
+    background:rgba(255,255,255,0.05);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:10px;
+    font-weight:700;
+    font-size:1.1em;
   }
-  .team-button img {
-    width: 60px;
-    height: 60px;
-    margin-bottom: 0.3em;
-    filter: drop-shadow(0 0 3px rgba(0,0,0,0.7));
-  }
-  .blue { background-color: #3b82f6; }
-  .red { background-color: #ef4444; }
-  .green { background-color: #22c55e; }
-  .jimmy { background-color: #facc15; color: black; }
-  .team-button:hover {
-    transform: scale(1.05);
-  }
-  .missions {
-    font-size: 1.1em;
-    text-align: left;
-    margin-top: 1em;
-    max-width: 500px;
-    margin-left: auto;
-    margin-right: auto;
-  }
-  .missions li {
-    margin: 0.4em 0;
-  }
-  #go-back {
-    margin-top: 1em;
-    padding: 0.6em 1.2em;
-    font-size: 1em;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    background-color: #444;
-    color: white;
+  .mission-reveal img{width:120px;height:120px;image-rendering:pixelated}
+  /* small screens */
+  @media (max-width:800px){
+    .layout{flex-direction:column;align-items:stretch}
+    .teams-col{flex-direction:row;justify-content:center;flex-wrap:wrap}
+    .team-btn{width:140px}
   }
 </style>
 </head>
 <body>
+<div class="wrap">
   <h1>Nashville Bachelor Games</h1>
 
-  <div class="team-buttons" id="team-buttons">
-    <button class="team-button blue" onclick="selectTeam('blue')">
-      <img src="https://play.pokemonshowdown.com/sprites/ani/squirtle.gif" alt="Squirtle" />
-      Blue Team
-    </button>
-    <button class="team-button red" onclick="selectTeam('red')">
-      <img src="https://play.pokemonshowdown.com/sprites/ani/charmander.gif" alt="Charmander" />
-      Red Team
-    </button>
-    <button class="team-button green" onclick="selectTeam('green')">
-      <img src="https://play.pokemonshowdown.com/sprites/ani/bulbasaur.gif" alt="Bulbasaur" />
-      Green Team
-    </button>
-    <button class="team-button jimmy" onclick="selectTeam('jimmy')">
-      <img src="https://play.pokemonshowdown.com/sprites/ani/pikachu.gif" alt="Pikachu" />
-      Jimmy Team
-    </button>
+  <div class="layout">
+    <div class="teams-col" id="teamsCol">
+      <!-- buttons injected by JS -->
+    </div>
+
+    <div class="panel" id="panel">
+      <div id="panelContent" style="text-align:center">
+        <p style="opacity:.9">Choose a team from the left to view missions. Progress persists locally.</p>
+      </div>
+    </div>
   </div>
+</div>
 
-  <div id="missions-container"></div>
-
-  <!-- Canvas for Confetti -->
-  <canvas id="confetti-canvas" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:999;"></canvas>
-
+<!-- confetti canvas lib -->
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
 <script>
-  const teamData = {
-    blue: {
-      color: "#3b82f6",
-      missions: [
-        "1. Take a group photo with a stranger wearing blue.",
-        "2. Find a blue-themed drink and photograph it.",
-        "3. Convince another team to trade items with you."
-      ]
-    },
-    red: {
-      color: "#ef4444",
-      missions: [
-        "1. Get a photo with someone wearing a red hat.",
-        "2. Find a Nashville hot chicken sign and pose with it.",
-        "3. Teach someone a dance move and record it."
-      ]
-    },
-    green: {
-      color: "#22c55e",
-      missions: [
-        "1. Spot and take a picture of something green in nature.",
-        "2. Get a selfie with a street performer.",
-        "3. High-five 5 strangers in a row."
-      ]
-    },
-    jimmy: {
-      color: "#facc15",
-      missions: [
-        "1. Take a video of Jimmy singing.",
-        "2. Photograph Jimmy doing something silly.",
-        "3. Get someone to say 'Jimmy is the best' on camera."
-      ]
+/* ---------------------------
+  Data & GIF mapping
+--------------------------- */
+const TEAMS = {
+  blue: {
+    title: 'Blue Team',
+    color: '#3b82f6',
+    startGif: 'https://play.pokemonshowdown.com/sprites/ani/squirtle.gif',
+    evo5: 'https://play.pokemonshowdown.com/sprites/ani/wartortle.gif',
+    evo10: 'https://play.pokemonshowdown.com/sprites/ani/blastoise.gif',
+    missions: [
+      "Find an object or animal that resembles a ‘blue’ Pokemon",
+      "Eat something ‘blue’",
+      "During the trip make a ‘blue’ drink, or order one",
+      "During a supply run, find and buy something unique that’s ‘blue’",
+      "Find something ‘blue’ at one of the nights out",
+      "Find something ‘blue’ at either the Museum or Parthenon",
+      "Find a ‘blue’ item that resembles Nashville",
+      "Take a picture of someone or something that resembles Jimmy",
+      "Have a conversation with a Nashville native and get a food suggestion",
+      "Practice your rizz with a stranger or strange thing"
+    ]
+  },
+  red: {
+    title: 'Red Team',
+    color: '#ef4444',
+    startGif: 'https://play.pokemonshowdown.com/sprites/ani/charmander.gif',
+    evo5: 'https://play.pokemonshowdown.com/sprites/ani/charmeleon.gif',
+    evo10: 'https://play.pokemonshowdown.com/sprites/ani/charizard.gif',
+    missions: [
+      "Find an object or animal that resembles a ‘red’ Pokemon",
+      "Eat something ‘red’",
+      "During the trip make a ‘red’ drink, or order one",
+      "During a supply run, find and buy something unique that’s ‘red’",
+      "Find something ‘red’ at one of the nights out",
+      "Find something ‘red’ at either the Museum or Parthenon",
+      "Find a ‘red’ item that resembles Nashville",
+      "Take a picture of someone or something that resembles Jimmy",
+      "Have a conversation with a Nashville native and get a food suggestion",
+      "Practice your rizz with a stranger or strange thing"
+    ]
+  },
+  green: {
+    title: 'Green Team',
+    color: '#22c55e',
+    startGif: 'https://play.pokemonshowdown.com/sprites/ani/bulbasaur.gif',
+    evo5: 'https://play.pokemonshowdown.com/sprites/ani/ivysaur.gif',
+    evo10: 'https://play.pokemonshowdown.com/sprites/ani/venusaur.gif',
+    missions: [
+      "Find an object or animal that resembles a ‘green’ Pokemon",
+      "Eat something ‘green’",
+      "During the trip make a ‘green’ drink, or order one",
+      "During a supply run, find and buy something unique that’s ‘green’",
+      "Find something ‘green’ at one of the nights out",
+      "Find something ‘green’ at either the Museum or Parthenon",
+      "Find a ‘green’ item that resembles Nashville",
+      "Take a picture of someone or something that resembles Jimmy",
+      "Have a conversation with a Nashville native and get a food suggestion",
+      "Practice your rizz with a stranger or strange thing"
+    ]
+  },
+  jimmy: { /* yellow theme */
+    title: 'Jimmy Team',
+    color: '#facc15',
+    startGif: 'https://play.pokemonshowdown.com/sprites/ani/pikachu.gif',
+    evo5: null,
+    evo10: 'https://play.pokemonshowdown.com/sprites/ani/raichu.gif',
+    missions: [
+      "Find an object or animal that resembles a ‘yellow’ Pokemon",
+      "Eat something ‘yellow’",
+      "During the trip make a ‘yellow’ drink, or order one",
+      "During a supply run, find and buy something unique that’s ‘yellow’",
+      "Find something ‘yellow’ at one of the nights out",
+      "Find something ‘yellow’ at either the Museum or Parthenon",
+      "Find a ‘yellow’ item that resembles Nashville",
+      "Take a picture of someone or something that resembles Jimmy",
+      "Have a conversation with a Nashville native and get a food suggestion",
+      "Practice your rizz with a stranger or strange thing"
+    ]
+  }
+};
+
+/* Secret missions (keyword -> text + gif) */
+const SECRET_MISSIONS = {
+  abs:    { text: "Congrats! You’ve unlocked a secret Abdullah mission. Send a selfie to Abdullah.", gif: "https://play.pokemonshowdown.com/sprites/ani/alakazam.gif" },
+  jimmy:  { text: "Nothing to congratulate, this is the free mission. Give Jimmy a dap for a free point.", gif: "https://play.pokemonshowdown.com/sprites/ani/gengar.gif" },
+  robert: { text: "Congrats! You’ve unlocked an even secret-er Robert mission. Get Robert to send you a selfie.", gif: "https://play.pokemonshowdown.com/sprites/ani/sudowoodo.gif" },
+  nashville:{ text:"Now this is a secret mission, take a picture of something historical in Nashville.", gif:"https://play.pokemonshowdown.com/sprites/ani/rapidash.gif" },
+  bachelor:{ text:"Whoa, now you’re thinking, take a picture of Jimmy being funny.", gif:"https://play.pokemonshowdown.com/sprites/ani/machamp.gif" },
+  october:{ text:"A special month, a special mission, take a picture of Jimmy being serious.", gif:"https://play.pokemonshowdown.com/sprites/ani/mrmime.gif" },
+  secret:{ text:"A bit on a nose right? Send a picture of Jimmy partaking in any Nashville festivities.", gif:"https://play.pokemonshowdown.com/sprites/ani/lapras.gif" }
+};
+
+/* ---------- helpers / state ---------- */
+const teamsCol = document.getElementById('teamsCol');
+const panelContent = document.getElementById('panelContent');
+
+const STORAGE_PREFIX = 'nbg_progress_'; // + team key
+const LAST_ACTIVE = 'nbg_last_active_team';
+let activeTeam = null;
+
+/* Build team buttons initially */
+function buildTeamButtons(){
+  teamsCol.innerHTML = '';
+  for(const key of Object.keys(TEAMS)){
+    const t = TEAMS[key];
+    const btn = document.createElement('button');
+    btn.className = `team-btn ${key}`;
+    btn.dataset.team = key;
+    btn.innerHTML = `<img src="${t.startGif}" alt="${t.title}"><div>${t.title}</div>`;
+    btn.onclick = ()=> selectTeam(key);
+    btn.style.opacity = '1';
+    btn.style.pointerEvents = 'auto';
+    teamsCol.appendChild(btn);
+  }
+}
+buildTeamButtons();
+
+/* select a team: show only that button, change bg, render missions */
+function selectTeam(teamKey){
+  activeTeam = teamKey;
+  localStorage.setItem(LAST_ACTIVE, teamKey);
+  confettiBurst(220);
+
+  // keep only selected button visible and move to top
+  const allBtns = Array.from(teamsCol.children);
+  const chosen = allBtns.find(b=>b.dataset.team===teamKey);
+  teamsCol.innerHTML = '';
+  teamsCol.appendChild(chosen);
+
+  // disable the button so no double clicks
+  chosen.style.pointerEvents = 'none';
+  chosen.style.opacity = '1';
+
+  // change page bg color (soft)
+  document.body.style.backgroundColor = TEAMS[teamKey].color;
+
+  // render panel content
+  renderTeamPanel(teamKey);
+}
+
+/* render the missions, checkboxes, secret box, reset & Go Back */
+function renderTeamPanel(teamKey){
+  const team = TEAMS[teamKey];
+  const savedKey = STORAGE_PREFIX + teamKey;
+  // load saved checked states (array of booleans)
+  let saved = JSON.parse(localStorage.getItem(savedKey) || 'null');
+  if(!saved || !Array.isArray(saved) || saved.length !== team.missions.length){
+    saved = new Array(team.missions.length).fill(false);
+  }
+
+  // create HTML
+  panelContent.innerHTML = `
+    <img id="mascotGif" class="mascot" src="${evolutionGifForCount(teamKey, countChecked(saved))}" alt="${team.title} mascot">
+    <div class="note">Each objective will be rated between 0-5</div>
+    <ol class="missions" id="missionsList">
+      ${team.missions.map((m,i)=>`<li><input type="checkbox" class="mission-checkbox" data-i="${i}" ${saved[i] ? 'checked' : ''} /> <span>${m}</span></li>`).join('')}
+    </ol>
+
+    <div class="secret-box">
+      <div style="font-weight:700;margin-bottom:6px">Enter a keyword for a secret mission</div>
+      <input id="secretInput" class="secret-input" placeholder="Secret mission..." autocomplete="off" spellcheck="false" />
+      <div id="secretReveal"></div>
+    </div>
+
+    <div class="controls">
+      <button class="btn btn-secondary" id="resetBtn" title="Reset progress for this team">Reset Progress</button>
+      <button class="btn btn-secondary" id="goBackBtn">Go Back</button>
+    </div>
+  `;
+
+  // wire up checkbox events
+  const missionCheckboxes = Array.from(document.querySelectorAll('.mission-checkbox'));
+  missionCheckboxes.forEach(cb=>{
+    cb.addEventListener('change', ()=>{
+      const idx = parseInt(cb.dataset.i,10);
+      saved[idx] = cb.checked;
+      localStorage.setItem(savedKey, JSON.stringify(saved));
+      // update mascot based on count
+      const mg = document.getElementById('mascotGif');
+      mg.src = evolutionGifForCount(teamKey, countChecked(saved));
+      // fanfare on 5 or 10 checked
+      const checkedCount = countChecked(saved);
+      if(checkedCount===5 || checkedCount===10){
+        confettiBurst(300);
+      }
+    });
+  });
+
+  // secret input handling
+  const secretInput = document.getElementById('secretInput');
+  const secretReveal = document.getElementById('secretReveal');
+  function handleSecret(){
+    const raw = secretInput.value.trim().toLowerCase();
+    if(!raw){ secretReveal.innerHTML = ''; return; }
+    const m = SECRET_MISSIONS[raw];
+    if(m){
+      secretReveal.innerHTML = `<div class="mission-reveal"><div>${m.text}</div><img src="${m.gif}" alt="secret gif"></div>`;
+      confettiFanfare();
+    } else {
+      secretReveal.innerHTML = `<div style="margin-top:8px;color:#ff9090">No secret mission found for "${raw}"</div>`;
+    }
+    secretInput.value = '';
+  }
+  secretInput.addEventListener('keydown', e=>{
+    if(e.key === 'Enter') {
+      e.preventDefault();
+      handleSecret();
+    }
+  });
+  // reveal button
+  const secretBox = document.querySelector('.secret-box');
+  const btnFetch = document.createElement('button');
+  btnFetch.className='btn';
+  btnFetch.style.background='#333'; btnFetch.style.color='#fff';
+  btnFetch.style.borderRadius='8px'; btnFetch.style.marginTop='8px';
+  btnFetch.textContent='Reveal';
+  btnFetch.onclick = handleSecret;
+  secretBox.appendChild(btnFetch);
+
+  // Reset button
+  document.getElementById('resetBtn').onclick = ()=>{
+    if(confirm(`Reset progress for ${team.title}?`)){
+      localStorage.removeItem(savedKey);
+      // reset mascot to start gif
+      document.getElementById('mascotGif').src = team.startGif;
+      // uncheck all
+      missionCheckboxes.forEach(cb=> cb.checked = false);
+      // clear secret reveal
+      secretReveal.innerHTML = '';
     }
   };
 
-  let originalButtonsHTML = document.getElementById("team-buttons").innerHTML;
+  // Go back button
+  document.getElementById('goBackBtn').onclick = ()=>{
+    document.body.style.backgroundColor = '';
+    activeTeam = null;
+    localStorage.removeItem(LAST_ACTIVE);
+    buildTeamButtons();
+    panelContent.innerHTML = `<p style="opacity:.9">Choose a team from the left to view missions. Progress persists locally.</p>`;
+  };
+}
 
-  function selectTeam(team) {
-    const container = document.getElementById("team-buttons");
-    const clickedButton = Array.from(container.children).find(btn => btn.classList.contains(team));
+/* count checked in saved array */
+function countChecked(arr){ return arr.filter(Boolean).length; }
 
-    // Clear all buttons except clicked
-    container.innerHTML = "";
-    container.appendChild(clickedButton);
+/* pick right gif based on checked count */
+function evolutionGifForCount(teamKey, count){
+  const t = TEAMS[teamKey];
+  if(teamKey === 'jimmy'){ // only evolves at 10
+    if(count >= 10 && t.evo10) return t.evo10;
+    return t.startGif;
+  } else {
+    if(count >= 10 && t.evo10) return t.evo10;
+    if(count >= 5 && t.evo5) return t.evo5;
+    return t.startGif;
+  }
+}
 
-    // Change background
-    document.body.style.backgroundColor = teamData[team].color;
-
-    // Show missions + back button
-    document.getElementById("missions-container").innerHTML = `
-      <div class="missions">
-        <ul>
-          ${teamData[team].missions.map(m => `<li>${m}</li>`).join("")}
-        </ul>
-        <button id="go-back" onclick="goBack()">Go Back</button>
-      </div>
-    `;
-
-    // Confetti flair
+/* confetti helpers */
+function confettiBurst(p=200){
+  const colors = ['#f59e0b','#ef4444','#3b82f6','#22c55e','#facc15'];
+  for(let i=0; i<3; i++){
     confetti({
-      particleCount: 150,
-      spread: 70,
-      origin: { y: 0.6 }
+      particleCount: Math.floor(p/3),
+      spread: 70 + i*10,
+      origin: { x: Math.random(), y: Math.random() * 0.6 + 0.3 },
+      colors: colors,
+      scalar: 1.2
     });
   }
+}
+function confettiFanfare(){
+  // multiple bursts with varied size and spread for fanfare
+  confetti({ particleCount: 150, spread: 120, startVelocity: 40, ticks: 600, gravity: 0.4, origin: { x: 0.2, y: 0.4 }, colors:['#ef4444','#facc15','#3b82f6','#22c55e','#a855f7'] });
+  confetti({ particleCount: 150, spread: 100, startVelocity: 45, ticks: 500, gravity: 0.5, origin: { x: 0.8, y: 0.4 }, colors:['#facc15','#ef4444','#3b82f6','#22c55e','#a855f7'] });
+  confetti({ particleCount: 250, spread: 160, startVelocity: 55, ticks: 700, gravity: 0.45, origin: { x: 0.5, y: 0.3 }, colors:['#22c55e','#3b82f6','#ef4444','#facc15','#a855f7'] });
+}
 
-  function goBack() {
-    // Restore buttons and background
-    document.getElementById("team-buttons").innerHTML = originalButtonsHTML;
-    document.body.style.backgroundColor = "#111";
-    document.getElementById("missions-container").innerHTML = "";
+/* on page load, restore last active team if any */
+window.onload = () => {
+  const last = localStorage.getItem(LAST_ACTIVE);
+  if(last && TEAMS[last]){
+    selectTeam(last);
   }
+};
 </script>
 </body>
 </html>
