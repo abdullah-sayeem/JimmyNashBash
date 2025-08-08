@@ -2,50 +2,124 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Red Team</title>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
   <style>
     body {
-      font-family: Arial, sans-serif;
+      font-family: 'Press Start 2P', cursive, Arial, sans-serif;
       background-color: #ef4444;
       color: white;
-      text-align: center;
+      margin: 0;
       padding: 2em;
+      text-align: center;
+      min-height: 100vh;
+      box-sizing: border-box;
     }
-    img {
-      max-width: 200px;
+    h1 {
+      margin-bottom: 0.5em;
+      font-size: 1.8em;
+      text-shadow: 0 0 8px #b91c1c;
+    }
+    img.team-mascot {
+      max-width: 180px;
       margin-bottom: 1em;
+      image-rendering: pixelated;
+      filter: drop-shadow(0 0 5px #b91c1c);
     }
     ol {
+      list-style: decimal inside;
+      font-size: 0.9em;
+      max-width: 600px;
+      margin: 0 auto;
       text-align: left;
-      display: inline-block;
-      font-size: 1.1em;
+      padding-left: 0;
     }
-    .bonus {
-      margin-top: 1em;
+    li {
+      margin-bottom: 1em;
+      line-height: 1.3;
+    }
+    label {
+      cursor: pointer;
+      user-select: none;
+    }
+    input[type="checkbox"] {
+      transform: scale(1.3);
+      margin-right: 0.6em;
+      cursor: pointer;
+    }
+    #points-counter {
+      font-size: 1.2em;
+      margin-top: 1.5em;
       font-weight: bold;
+      text-shadow: 0 0 10px #b91c1c;
+    }
+    /* Responsive */
+    @media (max-width: 480px) {
+      body {
+        padding: 1em;
+      }
+      img.team-mascot {
+        max-width: 140px;
+      }
+      ol {
+        font-size: 0.8em;
+      }
     }
   </style>
 </head>
 <body>
   <h1>Red Team</h1>
-  <img src="https://assets.pokemon.com/assets/cms2/img/pokedex/full/004.png" alt="Charmander" />
-  
-  <p>All of these efforts will be rated by the group from 0–5</p>
-  <ol>
-    <li>Find an object or animal that resembles a ‘red’ Pokemon</li>
-    <li>Eat something ‘red’</li>
-    <li>During the trip make a ‘red’ drink, or order one</li>
-    <li>During a supply run, find and buy something unique that’s ‘red’</li>
-    <li>Find something ‘red’ at one of the nights out</li>
-    <li>Find something ‘red’ at either the Museum or Parthenon</li>
-    <li>Find a ‘red’ item that resembles Nashville</li>
+  <img class="team-mascot" src="https://assets.pokemon.com/assets/cms2/img/pokedex/full/004.png" alt="Charmander" />
+
+  <ol id="mission-list">
+    <li><label><input type="checkbox" /> Find an object or animal that resembles a ‘red’ Pokemon</label></li>
+    <li><label><input type="checkbox" /> Eat something ‘red’</label></li>
+    <li><label><input type="checkbox" /> During the trip make a ‘red’ drink, or order one</label></li>
+    <li><label><input type="checkbox" /> During a supply run, find and buy something unique that’s ‘red’</label></li>
+    <li><label><input type="checkbox" /> Find something ‘red’ at one of the nights out</label></li>
+    <li><label><input type="checkbox" /> Find something ‘red’ at either the Museum or Parthenon</label></li>
+    <li><label><input type="checkbox" /> Find a ‘red’ item that resembles Nashville</label></li>
+    <li><label><input type="checkbox" /> Take a picture of someone or something that resembles Jimmy</label></li>
+    <li><label><input type="checkbox" /> Have a conversation with a Nashville native and get a food suggestion</label></li>
+    <li><label><input type="checkbox" /> Practice your rizz with a stranger or strange thing</label></li>
   </ol>
 
-  <div class="bonus">
-    Bonus - Take a picture of someone or something that resembles Jimmy<br/>
-    Bonus - Have a conversation with a Nashville native and get a food suggestion<br/>
-    Bonus - Practice your rizz with a stranger or strange thing
-  </div>
+  <div id="points-counter">Points: 0</div>
+
+  <script>
+    const missionList = document.getElementById('mission-list');
+    const pointsCounter = document.getElementById('points-counter');
+    const STORAGE_KEY = 'red-team-missions';
+
+    function updatePoints() {
+      const checkedBoxes = missionList.querySelectorAll('input[type=checkbox]:checked').length;
+      pointsCounter.textContent = `Points: ${checkedBoxes}`;
+    }
+
+    function saveProgress() {
+      const states = Array.from(missionList.querySelectorAll('input[type=checkbox]')).map(cb => cb.checked);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(states));
+    }
+
+    function loadProgress() {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) {
+        const states = JSON.parse(saved);
+        const checkboxes = missionList.querySelectorAll('input[type=checkbox]');
+        states.forEach((state, i) => {
+          if (checkboxes[i]) checkboxes[i].checked = state;
+        });
+        updatePoints();
+      }
+    }
+
+    missionList.addEventListener('change', () => {
+      updatePoints();
+      saveProgress();
+    });
+
+    loadProgress();
+  </script>
 </body>
 </html>
